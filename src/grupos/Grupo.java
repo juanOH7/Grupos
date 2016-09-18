@@ -14,8 +14,7 @@ public class Grupo {
     }
 
     public boolean add(Persona integrante) {
-        System.out.println(integrantes.add(integrante));
-        return true;
+        return   integrantes.add(integrante);
     }
 
     @Override
