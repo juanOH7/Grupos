@@ -1,0 +1,6 @@
+juan:julio
+ana,carlos:julio
+marco:gol,mai
+maria:marcos
+raul:gol,mai
+ra,isis:marcos

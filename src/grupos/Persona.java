@@ -1,12 +1,15 @@
 package grupos;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Persona {
+
     private String nombre;
     private boolean isCouple;
     private int turns = 0;
     private boolean assignado;
+    private ArrayList<Persona> casa = new ArrayList<>();
 
     public Persona(String nombre, boolean isCouple, int turn) {
         this.nombre = nombre;
@@ -18,11 +21,20 @@ public class Persona {
         return assignado;
     }
 
+    public void addCasa(Persona nueva) {
+        casa.add(nueva);
+    }
+
+    public ArrayList<Persona> getCasa() {
+        return casa;
+    }
+    
+    
+
     public void setAssignado(boolean assignado) {
         this.assignado = assignado;
     }
 
-    
     public boolean isIsCouple() {
         return isCouple;
     }
@@ -38,17 +50,17 @@ public class Persona {
     public void setTurns(int turns) {
         this.turns = turns;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return nombre;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() == getClass()) {
-            return ((Persona)obj).getName().equals(nombre);
+            return ((Persona) obj).getName().equals(nombre);
         }
-       return false;
+        return false;
     }
 
     @Override
@@ -60,14 +72,9 @@ public class Persona {
         return hash;
     }
 
-    
-    
-    
-    
     @Override
     public String toString() {
         return nombre;
     }
-    
-    
+
 }

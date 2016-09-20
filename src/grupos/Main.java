@@ -7,16 +7,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.MultiGraph;
 
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         File arc = new File("./miembros.txt");
         File gur = new File("./guardar.txt");
+        File arc2 = new File("aristas.txt");
         Scanner userSC = new Scanner(System.in);
         Scanner sc;
 
-        int numInt, numGr, sobra, numTur, totPEr = 0, totParejas = 0;
+        Graph graph = new MultiGraph("grafo");
+
+        int numInt, numGr, idEdg = 0, sobra, numTur, totPEr = 0, totParejas = 0;
         String REsPUs;
         boolean forcedCouple;
         boolean oneCouple;
@@ -49,6 +55,28 @@ public class Main {
                 } else {
                     tmp = new Persona(div[0], false, Integer.valueOf(div[1]));
                     personas.add(tmp);
+                }
+            }
+            sc = new Scanner(arc2);
+            while (sc.hasNextLine()) {
+                String comp = sc.nextLine();
+                String divCom[] = comp.split(":");
+                if ((graph.getNode(divCom[0]) == null) && (graph.getNode(divCom[1]) == null)) {
+                    graph.addNode(divCom[0]);
+                    graph.addNode(divCom[1]);
+                    graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+                } else if ((graph.getNode(divCom[0]) != null) && (graph.getNode(divCom[1]) == null)) {
+                    graph.addNode(divCom[1]);
+                    graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+                } else if ((graph.getNode(divCom[1]) != null) && (graph.getNode(divCom[0]) == null)) {
+                    graph.addNode(divCom[0]);
+                    graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+                } else {
+                    graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+                }
+                idEdg++;
+                for (Node node : graph) {
+                    node.addAttribute("ui.label", node.getId());
                 }
             }
         } else {
@@ -157,12 +185,14 @@ public class Main {
                 if (!grupos.get(i).isHasCouple() || forcedCouple) {
                     grupos.get(i).add(integrantesPa.get(indPare));
                     grupos.get(i).setNumFalta(grupos.get(i).getNumFalta() - 2);
+                    integrantesPa.get(indPare).addCasa(lideres.get(i));
                     indPare++;
                 }
             }
         } else {
             for (int i = 0; i < numGr && indPare < totParejas; i++) {
                 grupos.get(i).add(integrantesPa.get(indPare));
+                integrantesPa.get(indPare).addCasa(lideres.get(i));
                 grupos.get(i).setNumFalta(grupos.get(i).getNumFalta() - 2);
                 indPare++;
             }
@@ -172,6 +202,7 @@ public class Main {
         for (int i = 0; i < numGr && indice < integrantesNoPa.size(); i++) {
             for (int j = 0; j < grupos.get(i).getNumFalta() && indice < integrantesNoPa.size(); j++) {
                 grupos.get(i).add(integrantesNoPa.get(indice));
+                integrantesNoPa.get(indice).addCasa(lideres.get(i));
                 indice++;
             }
         }
@@ -187,12 +218,54 @@ public class Main {
             System.out.println(grupos.get(i).getIntegrantes());
         }
 
+        for (int i = 0; i < personas.size(); i++) {
+            for (int j = 0; j < personas.get(i).getCasa().size(); j++) {
+                System.out.println(personas.get(i) + " conoce casa de " + personas.get(i).getCasa().get(j));
+            }
+        }
+
         PrintWriter bw = new PrintWriter(new File("guardar.txt"));
         for (int i = 0; i < personas.size(); i++) {
             bw.write(personas.get(i).getName() + ":" + personas.get(i).getTurns() + "\n");
         }
         bw.close();
 
+        PrintWriter bw2 = new PrintWriter(new File("aristas.txt"));
+        for (int i = 0; i < personas.size(); i++) {
+            for (int j = 0; j < personas.get(i).getCasa().size(); j++) {
+                bw2.write(personas.get(i).getName() + ":" + personas.get(i).getCasa().get(j) + "\n");
+            }
+        }
+        bw2.close();
+
+        sc = new Scanner(arc2);
+        while (sc.hasNextLine()) {
+            String comp = sc.nextLine();
+            String divCom[] = comp.split(":");
+            if ((graph.getNode(divCom[0]) == null) && (graph.getNode(divCom[1]) == null)) {
+                graph.addNode(divCom[0]);
+                graph.addNode(divCom[1]);
+                graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+            } else if ((graph.getNode(divCom[0]) != null) && (graph.getNode(divCom[1]) == null)) {
+                graph.addNode(divCom[1]);
+                graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+            } else if ((graph.getNode(divCom[1]) != null) && (graph.getNode(divCom[0]) == null)) {
+                graph.addNode(divCom[0]);
+                graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+            } else {
+                graph.addEdge(String.valueOf(idEdg), divCom[0], divCom[1], true).addAttribute("length", 1);
+            }
+            idEdg++;
+        }
+        for (Node node : graph) {
+            node.addAttribute("ui.label", node.getId());
+        }
+        System.out.println("Ver Relacion? [S/N] ");
+        REsPUs = userSC.next();
+
+        if (REsPUs.equals("S") || REsPUs.equals("s")) {
+            graph.display();
+        }
     }
 
 }
