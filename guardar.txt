@@ -1,0 +1,9 @@
+juan:2
+ana,carlos:0
+marco:2
+julio:0
+maria:1
+raul:2
+marcos:1
+ra,isis:0
+gol,mai:1
