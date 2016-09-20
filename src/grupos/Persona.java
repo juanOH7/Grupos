@@ -5,11 +5,12 @@ import java.util.Objects;
 public class Persona {
     private String nombre;
     private boolean isCouple;
-    private byte turns = 0;
+    private int turns = 0;
 
-    public Persona(String nombre, boolean isCouple) {
+    public Persona(String nombre, boolean isCouple, int turn) {
         this.nombre = nombre;
         this.isCouple = isCouple;
+        this.turns = turn;
     }
 
     public boolean isIsCouple() {
@@ -20,11 +21,11 @@ public class Persona {
         this.isCouple = isCouple;
     }
 
-    public byte getTurns() {
+    public int getTurns() {
         return turns;
     }
 
-    public void setTurns(byte turns) {
+    public void setTurns(int turns) {
         this.turns = turns;
     }
     
