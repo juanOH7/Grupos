@@ -1,3 +1,7 @@
 juan:0
 ana,carlos:0
 marco:0
+julio:0
+maria:0
+raul:0
+marco:2

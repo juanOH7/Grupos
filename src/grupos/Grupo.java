@@ -6,10 +6,28 @@ import java.util.Set;
 public class Grupo {
 
     private Set<Persona> integrantes = new LinkedHashSet<>();
-    private boolean OneCouple;
+    private boolean hasCouple;
+    private int numInt;
+    private int numFalta;
 
-    public Grupo(boolean OneCouple) {
-        this.OneCouple = OneCouple;
+    public boolean itHasCouple() {
+        return hasCouple;
+    }
+
+    public void setHasCouple(boolean hasCouple) {
+        this.hasCouple = hasCouple;
+    }
+
+    public Grupo(int numInt) {
+        this.numInt = numInt;
+    }
+
+    public void setNumInt(int numInt) {
+        this.numInt = numInt;
+    }
+
+    public void setNumFalta(int numFalta) {
+        this.numFalta = numFalta;
     }
 
     public boolean add(Persona integrante) {
@@ -19,11 +37,10 @@ public class Grupo {
     public Set<Persona> getIntegrantes() {
         return integrantes;
     }
-
-    
+  
     @Override
     public String toString() {
-        return "Grupo" + integrantes + "OneCouple=" + OneCouple + '}';
+        return "Grupo" + integrantes + "OneCouple=" + hasCouple + '}';
     }
 
 }

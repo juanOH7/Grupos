@@ -6,6 +6,7 @@ public class Persona {
     private String nombre;
     private boolean isCouple;
     private int turns = 0;
+    private boolean assignado;
 
     public Persona(String nombre, boolean isCouple, int turn) {
         this.nombre = nombre;
@@ -13,6 +14,15 @@ public class Persona {
         this.turns = turn;
     }
 
+    public boolean isAssignado() {
+        return assignado;
+    }
+
+    public void setAssignado(boolean assignado) {
+        this.assignado = assignado;
+    }
+
+    
     public boolean isIsCouple() {
         return isCouple;
     }
