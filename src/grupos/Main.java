@@ -17,8 +17,8 @@ public class Main {
 
         int numInt, numGr, sobra, totPEr = 0, totParejas = 0;
         String REsPUs;
-        boolean forcedCouple = false;
-        boolean oneCouple = false;
+        boolean forcedCouple;
+        boolean oneCouple;
         ArrayList<Integer> numXgru = new ArrayList();
 
         LinkedList<Persona> personas = new LinkedList();
@@ -80,24 +80,35 @@ public class Main {
         }
 
         for (int i = 0; i < sobra; i++) {
-            numXgru.add(numXgru.get(i) + 1);
+            numXgru.set(i, numXgru.get(i) + 1);
         }
-
-        System.out.println(numGr);
 
         Collections.shuffle(candidatosLider);
         for (int i = 0; i < numGr; i++) {
             lideres.add(candidatosLider.get(i));
             lideres.get(i).setTurns(2);
             lideres.get(i).setAssignado(true);
+            if (candidatosLider.get(i).isIsCouple()) {
+                totParejas -= 1;
+            }
         }
 
-        for (int i = 0; i < numGr; i++) {
-            grupos.add(new Grupo(numInt));
+        for (int i = 0; i < lideres.size(); i++) {
         }
+        for (int i = 0; i < numGr; i++) {
+            grupos.add(new Grupo(numXgru.get(i)));
+        }
+
 
         for (int i = 0; i < numGr; i++) {
             grupos.get(i).add(lideres.get(i));
+            if (lideres.get(i).isIsCouple()) {
+                grupos.get(i).setNumFalta(grupos.get(i).getNumInt() - 2);
+                grupos.get(i).setHasCouple(true);
+            } else {
+                grupos.get(i).setNumFalta(grupos.get(i).getNumInt() - 1);
+                grupos.get(i).setHasCouple(false);
+            }
         }
 
         for (int i = 0; i < personas.size(); i++) {
@@ -105,14 +116,50 @@ public class Main {
                 integrantes.add(personas.get(i));
             }
         }
-
         for (int i = 0; i < integrantes.size(); i++) {
             if (integrantes.get(i).isIsCouple()) {
+                integrantesPa.add(integrantes.get(i));
+            } else {
+                integrantesNoPa.add(integrantes.get(i));
+            }
+        }
 
+        Collections.shuffle(integrantesPa);
+        Collections.shuffle(integrantesNoPa);
+
+        int indPare = 0;
+        if (oneCouple) {
+            for (int i = 0; i < numGr && indPare < totParejas; i++) {
+                if (!grupos.get(i).isHasCouple() || forcedCouple) {
+                    grupos.get(i).add(integrantesPa.get(indPare));
+                    grupos.get(i).setNumFalta(grupos.get(i).getNumFalta() - 2);
+                    indPare++;
+                }
+            }
+        } else {
+            for (int i = 0; i < numGr && indPare < totParejas; i++) {
+                grupos.get(i).add(integrantesPa.get(indPare));
+                grupos.get(i).setNumFalta(grupos.get(i).getNumFalta() - 2);
+                indPare++;
+            }
+        }
+
+        int indice = 0;
+        for (int i = 0; i < numGr && indice < integrantesNoPa.size(); i++) {
+            for (int j = 0; j < grupos.get(i).getNumFalta() && indice < integrantesNoPa.size(); j++) {
+                grupos.get(i).add(integrantesNoPa.get(indice));
+                indice++;
+            }
+        }
+        
+        for (int i = 0; i < integrantes.size(); i++) {
+            if (integrantes.get(i).getTurns() != 0) {
+                integrantes.get(i).setTurns(integrantes.get(i).getTurns() - 1);
             }
         }
 
         for (int i = 0; i < grupos.size(); i++) {
+            System.out.println("Grupo" + (i + 1));
             System.out.println(grupos.get(i).getIntegrantes());
         }
 

@@ -4,4 +4,6 @@ marco:0
 julio:0
 maria:0
 raul:0
-marco:2
+marcos:2
+ra,isis:0
+gol,mai:0

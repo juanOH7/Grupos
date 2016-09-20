@@ -34,6 +34,18 @@ public class Grupo {
         return   integrantes.add(integrante);
     }
 
+    public boolean isHasCouple() {
+        return hasCouple;
+    }
+
+    public int getNumInt() {
+        return numInt;
+    }
+
+    public int getNumFalta() {
+        return numFalta;
+    }
+
     public Set<Persona> getIntegrantes() {
         return integrantes;
     }
